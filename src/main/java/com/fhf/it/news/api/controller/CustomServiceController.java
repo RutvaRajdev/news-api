@@ -1,8 +1,7 @@
 package com.fhf.it.news.api.controller;
 
-import com.fhf.it.news.api.model.EverythingResponse;
+import com.fhf.it.news.api.model.ResponseWrapper;
 import com.fhf.it.news.api.service.PublicNewsAPIService;
-import com.fhf.it.news.api.service.impl.PublicNewsAPIServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,20 +22,20 @@ public class CustomServiceController {
     private static final Logger LOGGER = LogManager.getLogger(CustomServiceController.class);
 
     @GetMapping(value = "/getByTitle/{title}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EverythingResponse> getByTitle(@PathVariable String title) {
+    public ResponseEntity<ResponseWrapper> getByTitle(@PathVariable String title) {
         LOGGER.warn("Searching for articles with title \"" + title + "\"");
 
-        EverythingResponse allArticles = publicNewsAPIService.getAllArticles(title, TITLE, null, null, null, null, null, null, null, 100, 1);
-        ResponseEntity<EverythingResponse> response = new ResponseEntity<>(allArticles, HttpStatus.OK);
+        ResponseWrapper allArticles = publicNewsAPIService.getAllArticles(title, TITLE, null, null, null, null, null, null, null, 100, 1);
+        ResponseEntity<ResponseWrapper> response = new ResponseEntity<>(allArticles, HttpStatus.OK);
         return response;
     }
 
     @GetMapping(value = "/searchByKeywordInTitle", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EverythingResponse> searchByKeywordInTitle(@RequestParam String keyword) {
+    public ResponseEntity<ResponseWrapper> searchByKeywordInTitle(@RequestParam String keyword) {
         LOGGER.warn("Searching for articles containing \"" + keyword + "\" in the title");
 
-        EverythingResponse allArticles = publicNewsAPIService.getAllArticles("+"+keyword, TITLE, null, null, null, null, null, null, null, 100, 1);
-        ResponseEntity<EverythingResponse> response = new ResponseEntity<>(allArticles, HttpStatus.OK);
+        ResponseWrapper allArticles = publicNewsAPIService.getAllArticles("+"+keyword, TITLE, null, null, null, null, null, null, null, 100, 1);
+        ResponseEntity<ResponseWrapper> response = new ResponseEntity<>(allArticles, HttpStatus.OK);
         return response;
     }
 }

@@ -1,6 +1,6 @@
 package com.fhf.it.news.api.client;
 
-import com.fhf.it.news.api.model.EverythingResponse;
+import com.fhf.it.news.api.model.ResponseWrapper;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +13,7 @@ import java.util.Date;
 public interface PublicNewsAPIClient {
 
     @RequestMapping(value = "/everything", method = RequestMethod.GET)
-    public EverythingResponse getEverything(
+    public ResponseWrapper getEverything(
             @RequestParam String q,
             @RequestParam String searchIn,
             @RequestParam String sources,

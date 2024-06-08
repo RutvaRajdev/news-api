@@ -2,7 +2,7 @@ package com.fhf.it.news.api.service.impl;
 
 import com.fhf.it.news.api.client.PublicNewsAPIClient;
 import com.fhf.it.news.api.model.Article;
-import com.fhf.it.news.api.model.EverythingResponse;
+import com.fhf.it.news.api.model.ResponseWrapper;
 import com.fhf.it.news.api.service.PublicNewsAPIService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,21 +29,21 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
      * @return
      */
     @Override
-    public EverythingResponse getAllArticles(String q,
-                                             String searchIn,
-                                             String sources,
-                                             String domains,
-                                             String excludeDomains,
-                                             Date from,
-                                             Date to,
-                                             String language,
-                                             String sortBy,
-                                             Integer pageSize,
-                                             Integer page) {
+    public ResponseWrapper getAllArticles(String q,
+                                          String searchIn,
+                                          String sources,
+                                          String domains,
+                                          String excludeDomains,
+                                          Date from,
+                                          Date to,
+                                          String language,
+                                          String sortBy,
+                                          Integer pageSize,
+                                          Integer page) {
 
         LOGGER.warn("Making a call to public API Endpoint");
 
-        EverythingResponse response = publicNewsAPIClient.getEverything(q, searchIn, sources, domains, excludeDomains, from, to, language, sortBy, pageSize, page, getAuthString());
+        ResponseWrapper response = publicNewsAPIClient.getEverything(q, searchIn, sources, domains, excludeDomains, from, to, language, sortBy, pageSize, page, getAuthString());
 
         int nResults = response.getTotalResults();
 
@@ -58,7 +58,7 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
                 allArticles.addAll(publicNewsAPIClient.getEverything(q, searchIn, sources, domains, excludeDomains, from, to, language, sortBy, pageSize, i, getAuthString()).getArticles());
             }
 
-            return new EverythingResponse(nResults, allArticles);
+            return new ResponseWrapper(nResults, allArticles);
         }
     }
 
