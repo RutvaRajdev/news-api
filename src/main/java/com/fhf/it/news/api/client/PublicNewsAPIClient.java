@@ -5,10 +5,25 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Date;
 
 @FeignClient(name = "public-news-api", url = "${api.newsApiOrg.url}")
 public interface PublicNewsAPIClient {
 
     @RequestMapping(value = "/everything", method = RequestMethod.GET)
-    public EverythingResponse getEverything(@RequestHeader("Authorization") String authorization);
+    public EverythingResponse getEverything(
+            @RequestParam String q,
+            @RequestParam String searchIn,
+            @RequestParam String sources,
+            @RequestParam String domains,
+            @RequestParam String excludeDomains,
+            @RequestParam Date from,
+            @RequestParam Date to,
+            @RequestParam String language,
+            @RequestParam String sortBy,
+            @RequestParam Integer pageSize,
+            @RequestParam Integer page,
+            @RequestHeader("Authorization") String authorization);
 }

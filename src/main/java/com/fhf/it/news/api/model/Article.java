@@ -1,5 +1,8 @@
 package com.fhf.it.news.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 import lombok.Value;
 
 import java.util.Date;
@@ -11,7 +14,11 @@ public class Article {
     private String title;
     private String description;
     private String url;
-    private String urlToImage;
     private Date publishedAt;
     private String content;
+
+    @JsonProperty("source")
+    public String getSourceName() {
+        return source != null ? source.getName() : null;
+    }
 }

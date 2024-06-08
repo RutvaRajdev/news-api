@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,10 +18,10 @@ public class CustomServiceController {
     @Autowired
     private PublicNewsAPIService publicNewsAPIService;
 
-    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EverythingResponse> getAllArticles() {
-        
-        EverythingResponse allArticles = publicNewsAPIService.getAllArticles();
+    @GetMapping(value = "/getByTitle/{title}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<EverythingResponse> getAllArticles(@PathVariable String title) {
+
+        EverythingResponse allArticles = publicNewsAPIService.getAllArticles(title, "title", null, null, null, null, null, null, null, null, null);
         ResponseEntity<EverythingResponse> response = new ResponseEntity<>(allArticles, HttpStatus.OK);
         return response;
     }

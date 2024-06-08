@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
+import java.util.Date;
 
 @Service
 public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
@@ -22,10 +23,19 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
      * @return
      */
     @Override
-    public EverythingResponse getAllArticles() {
-        String authString = getAuthString();
+    public EverythingResponse getAllArticles(String q,
+                                             String searchIn,
+                                             String sources,
+                                             String domains,
+                                             String excludeDomains,
+                                             Date from,
+                                             Date to,
+                                             String language,
+                                             String sortBy,
+                                             Integer pageSize,
+                                             Integer page) {
 
-        return publicNewsAPIClient.getEverything(authString);
+        return publicNewsAPIClient.getEverything(q, searchIn, sources, domains, excludeDomains, from, to, language, sortBy, pageSize, page, getAuthString());
     }
 
     private String getAuthString() {
