@@ -25,7 +25,7 @@ public class CustomServiceController {
     public ResponseEntity<ResponseWrapper> getByTitle(@PathVariable String title) {
         LOGGER.warn("Searching for articles with title \"" + title + "\"");
 
-        ResponseWrapper allArticles = publicNewsAPIService.getAllArticles(title, TITLE, null, null, null, null, null, null, null, 100, 1);
+        ResponseWrapper allArticles = publicNewsAPIService.getAllArticles(title, TITLE, null, null, null, null, null, null, null);
         ResponseEntity<ResponseWrapper> response = new ResponseEntity<>(allArticles, HttpStatus.OK);
         return response;
     }
@@ -34,7 +34,7 @@ public class CustomServiceController {
     public ResponseEntity<ResponseWrapper> searchByKeywordInTitle(@RequestParam String keyword) {
         LOGGER.warn("Searching for articles containing \"" + keyword + "\" in the title");
 
-        ResponseWrapper allArticles = publicNewsAPIService.getAllArticles("+"+keyword, TITLE, null, null, null, null, null, null, null, 100, 1);
+        ResponseWrapper allArticles = publicNewsAPIService.getAllArticles("+"+keyword, TITLE, null, null, null, null, null, null, null);
         ResponseEntity<ResponseWrapper> response = new ResponseEntity<>(allArticles, HttpStatus.OK);
         return response;
     }
@@ -43,7 +43,7 @@ public class CustomServiceController {
     public ResponseEntity<ResponseWrapper> getHeadlinesByCountry(@RequestParam String country) {
         LOGGER.warn("Searching for top headlines for country code " + country);
 
-        ResponseWrapper allArticles = publicNewsAPIService.getTopHeadlines(country, null, null, null, null,100, 1);
+        ResponseWrapper allArticles = publicNewsAPIService.getTopHeadlines(country, null, null, null, null);
         ResponseEntity<ResponseWrapper> response = new ResponseEntity<>(allArticles, HttpStatus.OK);
         return response;
     }
@@ -54,7 +54,7 @@ public class CustomServiceController {
         if(n != null)
             LOGGER.warn("Restricting n to " + n);
 
-        ResponseWrapper allArticles = publicNewsAPIService.getTopHeadlines(null, null, null, keyword, n, 100, 1);
+        ResponseWrapper allArticles = publicNewsAPIService.getTopHeadlines(null, null, null, keyword, n);
         ResponseEntity<ResponseWrapper> response = new ResponseEntity<>(allArticles, HttpStatus.OK);
         return response;
     }

@@ -15,15 +15,11 @@ public interface PublicNewsAPIService {
                                    Date from,
                                    Date to,
                                    String language,
-                                   String sortBy,
-                                   Integer pageSize,
-                                   Integer page);
+                                   String sortBy);
 
     ResponseWrapper getTopHeadlines(String country,
                                     String category,
                                     String sources,
                                     String q,
-                                    Integer n,
-                                    Integer pageSize,
-                                    Integer page);
+                                    Integer n);
 }

@@ -24,6 +24,12 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
     @Value("${api.newsApiOrg.apiKey}")
     private String encodedApikey;
 
+    @Value("${api.newsApiOrg.endpoint.everything.pageSize}")
+    private int everythingPageSize;
+
+    @Value("${api.newsApiOrg.endpoint.topHeadlines.pageSize}")
+    private int topHeadlinesPageSize;
+
     private static final String REMOVED = "[Removed]";
     private static final String ERROR_UPGRADE_REQUIRED = "[426 Upgrade Required]";
 
@@ -41,13 +47,11 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
                                           Date from,
                                           Date to,
                                           String language,
-                                          String sortBy,
-                                          Integer pageSize,
-                                          Integer page) {
+                                          String sortBy) {
 
         LOGGER.info("Making a call to public API Endpoint");
 
-        ResponseWrapper response = publicNewsAPIClient.getEverything(q, searchIn, sources, domains, excludeDomains, from, to, language, sortBy, pageSize, page, getAuthString());
+        ResponseWrapper response = publicNewsAPIClient.getEverything(q, searchIn, sources, domains, excludeDomains, from, to, language, sortBy, everythingPageSize, 1, getAuthString());
 
         int nResults = response.getTotalResults();
 
@@ -56,8 +60,8 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
         List<Article> allArticles = response.getArticles();
 
         try {
-            for(int i=2; i<=Math.ceil((double) nResults/pageSize); i++) {
-                allArticles.addAll(publicNewsAPIClient.getEverything(q, searchIn, sources, domains, excludeDomains, from, to, language, sortBy, pageSize, i, getAuthString()).getArticles());
+            for(int i = 2; i<=Math.ceil((double) nResults/ everythingPageSize); i++) {
+                allArticles.addAll(publicNewsAPIClient.getEverything(q, searchIn, sources, domains, excludeDomains, from, to, language, sortBy, everythingPageSize, i, getAuthString()).getArticles());
             }
         } catch (Exception e) {
             if(e.getMessage().contains(ERROR_UPGRADE_REQUIRED)) {
@@ -76,15 +80,13 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
      * @param category
      * @param sources
      * @param q
-     * @param pageSize
-     * @param page
      * @return ResponseWrapper
      */
     @Override
-    public ResponseWrapper getTopHeadlines(String country, String category, String sources, String q, Integer n, Integer pageSize, Integer page) {
+    public ResponseWrapper getTopHeadlines(String country, String category, String sources, String q, Integer n) {
         LOGGER.info("Making a call to public API Endpoint");
 
-        ResponseWrapper response = publicNewsAPIClient.getTopHeadlines(country, category, sources, q, 100, 1, getAuthString());
+        ResponseWrapper response = publicNewsAPIClient.getTopHeadlines(country, category, sources, q, topHeadlinesPageSize, 1, getAuthString());
 
         List<Article> allArticles = response.getArticles();
 
@@ -99,8 +101,8 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
         LOGGER.info("{} results found!", nResults);
 
         try {
-            for(int i=2; i<=Math.ceil((double) nResults/pageSize); i++) {
-                allArticles.addAll(publicNewsAPIClient.getTopHeadlines(country, category, sources, q, 100, i, getAuthString()).getArticles());
+            for(int i = 2; i<=Math.ceil((double) nResults/ topHeadlinesPageSize); i++) {
+                allArticles.addAll(publicNewsAPIClient.getTopHeadlines(country, category, sources, q, topHeadlinesPageSize, i, getAuthString()).getArticles());
             }
         } catch (Exception e) {
             if(e.getMessage().contains(ERROR_UPGRADE_REQUIRED)) {
