@@ -1,5 +1,6 @@
 package com.fhf.it.news.api.controller;
 
+import com.fhf.it.news.api.model.ErrorResponseWrapper;
 import com.fhf.it.news.api.model.ResponseWrapper;
 import com.fhf.it.news.api.service.PublicNewsAPIService;
 import org.apache.logging.log4j.LogManager;
@@ -10,6 +11,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/service")
 public class CustomServiceController {
@@ -19,6 +23,12 @@ public class CustomServiceController {
 
     private static final String TITLE = "title";
     private static final String PUBLISHED_AT = "publishedAt";
+    private static final int BAD_REQUEST_CODE = HttpStatus.BAD_REQUEST.value();
+
+    private static final List<String> validCountries = Arrays.asList("ae", "ar", "at", "au", "be", "bg", "br", "ca", "ch",
+            "cn", "co", "cu", "cz", "de", "eg", "fr", "gb", "gr", "hk", "hu", "id", "ie", "il", "in", "it", "jp", "kr",
+            "lt", "lv", "ma", "mx", "my", "ng", "nl", "no", "nz", "ph", "pl", "pt", "ro", "rs", "ru", "sa", "se", "sg",
+            "si", "sk", "th", "tr", "tw", "ua", "us", "ve", "za");
 
     private static final Logger LOGGER = LogManager.getLogger(CustomServiceController.class);
 
@@ -32,7 +42,7 @@ public class CustomServiceController {
     }
 
     @GetMapping(value = "/getNLatestByKeyword", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseWrapper> getNLatestByKeyword(@RequestParam int n, @RequestParam String keyword) {
+    public ResponseEntity<?> getNLatestByKeyword(@RequestParam Integer n, @RequestParam String keyword) {
         LOGGER.warn("Searching for " + n + " latest articles containing keyword " + keyword);
 
         ResponseWrapper allArticles = publicNewsAPIService.getAllArticles(keyword, null, null, null, null, null, null, null, null, PUBLISHED_AT, n);
@@ -59,7 +69,11 @@ public class CustomServiceController {
     }
 
     @GetMapping(value = "/getHeadlinesByCountry", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseWrapper> getHeadlinesByCountry(@RequestParam String country) {
+    public ResponseEntity<?> getHeadlinesByCountry(@RequestParam String country) {
+        if(!validCountries.contains(country)) {
+            return new ResponseEntity<ErrorResponseWrapper>(new ErrorResponseWrapper("Please provide a valid country code", BAD_REQUEST_CODE), HttpStatus.BAD_REQUEST);
+        }
+
         LOGGER.warn("Searching for top headlines for country code " + country);
 
         ResponseWrapper allArticles = publicNewsAPIService.getTopHeadlines(country, null, null, null, null);
@@ -68,7 +82,12 @@ public class CustomServiceController {
     }
 
     @GetMapping(value = "/getTopHeadlinesByKeyword", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseWrapper> getTopHeadlinesByKeyword(@RequestParam String keyword, @RequestParam(required = false) Integer n) {
+    public ResponseEntity<?> getTopHeadlinesByKeyword(@RequestParam String keyword, @RequestParam(required = false) Integer n) {
+        if(n < 0 || n > 100) {
+            return new ResponseEntity<ErrorResponseWrapper>(new ErrorResponseWrapper("Please provide a value of n between 1 and 100", BAD_REQUEST_CODE), HttpStatus.BAD_REQUEST);
+
+        }
+
         LOGGER.warn("Searching the top headlines for keyword " + keyword);
 
         ResponseWrapper allArticles = publicNewsAPIService.getTopHeadlines(null, null, null, keyword, n);

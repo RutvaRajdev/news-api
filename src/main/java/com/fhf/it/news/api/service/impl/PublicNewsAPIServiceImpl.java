@@ -134,7 +134,7 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
     }
 
     private List<Article> filterBadArticles(List<Article> articles) {
-        LOGGER.warn("Filtering bad articles");
+        LOGGER.warn("Filtering out bad articles");
 
         return  articles.stream().filter((article) ->
                 (article.getTitle() == null || !article.getTitle().equalsIgnoreCase(REMOVED)) &&
