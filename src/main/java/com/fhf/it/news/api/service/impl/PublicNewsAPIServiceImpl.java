@@ -42,22 +42,35 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
     public ResponseWrapper getAllArticles(String q,
                                           String searchIn,
                                           String sources,
+                                          String authorName,
                                           String domains,
                                           String excludeDomains,
                                           Date from,
                                           Date to,
                                           String language,
-                                          String sortBy) {
+                                          String sortBy,
+                                          Integer n) {
 
         LOGGER.info("Making a call to public API Endpoint");
 
         ResponseWrapper response = publicNewsAPIClient.getEverything(q, searchIn, sources, domains, excludeDomains, from, to, language, sortBy, everythingPageSize, 1, getAuthString());
 
+        List<Article> allArticles = response.getArticles();
+
+        if(n != null) {
+            LOGGER.warn("Restricting result size to " + n);
+            allArticles = filterBadArticles(allArticles);
+
+            if(authorName != null) {
+                allArticles = filterByAuthor(allArticles, authorName);
+            }
+
+            return new ResponseWrapper(n, allArticles.subList(0, n));
+        }
+
         int nResults = response.getTotalResults();
 
         LOGGER.info("{} results found!", nResults);
-
-        List<Article> allArticles = response.getArticles();
 
         try {
             for(int i = 2; i<=Math.ceil((double) nResults/ everythingPageSize); i++) {
@@ -71,6 +84,10 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
 
 
         allArticles = filterBadArticles(allArticles);
+
+        if(authorName != null) {
+            allArticles = filterByAuthor(allArticles, authorName);
+        }
 
         return new ResponseWrapper(allArticles.size(), allArticles);
     }
@@ -122,6 +139,14 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
         return  articles.stream().filter((article) ->
                 (article.getTitle() == null || !article.getTitle().equalsIgnoreCase(REMOVED)) &&
                         (article.getContent() == null || !article.getContent().equalsIgnoreCase(REMOVED)))
+                .collect(Collectors.toList());
+    }
+
+    private List<Article> filterByAuthor(List<Article> articles, String authorName) {
+        LOGGER.warn("Filtering out articles not by author " + authorName);
+
+        return articles.stream().filter(article ->
+                article.getAuthor() != null && article.getAuthor().toLowerCase().contains(authorName.toLowerCase()))
                 .collect(Collectors.toList());
     }
 

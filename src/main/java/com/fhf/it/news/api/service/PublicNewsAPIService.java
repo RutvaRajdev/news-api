@@ -10,12 +10,14 @@ public interface PublicNewsAPIService {
     ResponseWrapper getAllArticles(String q,
                                    String searchIn,
                                    String sources,
+                                   String authorName,
                                    String domains,
                                    String excludeDomains,
                                    Date from,
                                    Date to,
                                    String language,
-                                   String sortBy);
+                                   String sortBy,
+                                   Integer n);
 
     ResponseWrapper getTopHeadlines(String country,
                                     String category,

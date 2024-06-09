@@ -18,6 +18,7 @@ public class CustomServiceController {
     private PublicNewsAPIService publicNewsAPIService;
 
     private static final String TITLE = "title";
+    private static final String PUBLISHED_AT = "publishedAt";
 
     private static final Logger LOGGER = LogManager.getLogger(CustomServiceController.class);
 
@@ -25,7 +26,25 @@ public class CustomServiceController {
     public ResponseEntity<ResponseWrapper> getByTitle(@PathVariable String title) {
         LOGGER.warn("Searching for articles with title \"" + title + "\"");
 
-        ResponseWrapper allArticles = publicNewsAPIService.getAllArticles(title, TITLE, null, null, null, null, null, null, null);
+        ResponseWrapper allArticles = publicNewsAPIService.getAllArticles(title, TITLE, null, null, null, null, null, null, null, null, null);
+        ResponseEntity<ResponseWrapper> response = new ResponseEntity<>(allArticles, HttpStatus.OK);
+        return response;
+    }
+
+    @GetMapping(value = "/getNLatestByKeyword", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseWrapper> getNLatestByKeyword(@RequestParam int n, @RequestParam String keyword) {
+        LOGGER.warn("Searching for " + n + " latest articles containing keyword " + keyword);
+
+        ResponseWrapper allArticles = publicNewsAPIService.getAllArticles(keyword, null, null, null, null, null, null, null, null, PUBLISHED_AT, n);
+        ResponseEntity<ResponseWrapper> response = new ResponseEntity<>(allArticles, HttpStatus.OK);
+        return response;
+    }
+
+    @GetMapping(value = "/searchByAuthorAndKeyword", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseWrapper> searchByAuthorAndKeywordInTitle(@RequestParam String author, @RequestParam String keyword) {
+        LOGGER.warn("Searching for articles containing \"" + keyword + "\" in the title by author " + author);
+
+        ResponseWrapper allArticles = publicNewsAPIService.getAllArticles(keyword, null, null, author, null, null, null, null, null, null, null);
         ResponseEntity<ResponseWrapper> response = new ResponseEntity<>(allArticles, HttpStatus.OK);
         return response;
     }
@@ -34,7 +53,7 @@ public class CustomServiceController {
     public ResponseEntity<ResponseWrapper> searchByKeywordInTitle(@RequestParam String keyword) {
         LOGGER.warn("Searching for articles containing \"" + keyword + "\" in the title");
 
-        ResponseWrapper allArticles = publicNewsAPIService.getAllArticles("+"+keyword, TITLE, null, null, null, null, null, null, null);
+        ResponseWrapper allArticles = publicNewsAPIService.getAllArticles(keyword, TITLE, null, null, null, null, null, null, null, null, null);
         ResponseEntity<ResponseWrapper> response = new ResponseEntity<>(allArticles, HttpStatus.OK);
         return response;
     }
@@ -51,8 +70,6 @@ public class CustomServiceController {
     @GetMapping(value = "/getTopHeadlinesByKeyword", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseWrapper> getTopHeadlinesByKeyword(@RequestParam String keyword, @RequestParam(required = false) Integer n) {
         LOGGER.warn("Searching the top headlines for keyword " + keyword);
-        if(n != null)
-            LOGGER.warn("Restricting n to " + n);
 
         ResponseWrapper allArticles = publicNewsAPIService.getTopHeadlines(null, null, null, keyword, n);
         ResponseEntity<ResponseWrapper> response = new ResponseEntity<>(allArticles, HttpStatus.OK);
