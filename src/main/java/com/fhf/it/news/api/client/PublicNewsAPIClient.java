@@ -26,4 +26,14 @@ public interface PublicNewsAPIClient {
             @RequestParam Integer pageSize,
             @RequestParam Integer page,
             @RequestHeader("Authorization") String authorization);
+
+    @RequestMapping(value = "/top-headlines", method = RequestMethod.GET)
+    public ResponseWrapper getTopHeadlines(
+            @RequestParam String country,
+            @RequestParam String category,
+            @RequestParam String sources,
+            @RequestParam String q,
+            @RequestParam Integer pageSize,
+            @RequestParam Integer page,
+            @RequestHeader("Authorization") String authorization);
 }

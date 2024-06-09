@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
@@ -22,6 +23,8 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
 
     @Value("${api.newsApiOrg.apiKey}")
     private String encodedApikey;
+
+    private static final String REMOVED = "[Removed]";
 
     private static final Logger LOGGER = LogManager.getLogger(PublicNewsAPIServiceImpl.class);
 
@@ -49,17 +52,51 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
 
         LOGGER.info("{} results found!", nResults);
 
-        if(nResults <= 100) {
-            return response;
-        } else {
-
-            List<Article> allArticles = response.getArticles();
-            for(int i=2; i<=Math.ceil((double) nResults/pageSize); i++) {
-                allArticles.addAll(publicNewsAPIClient.getEverything(q, searchIn, sources, domains, excludeDomains, from, to, language, sortBy, pageSize, i, getAuthString()).getArticles());
-            }
-
-            return new ResponseWrapper(nResults, allArticles);
+        List<Article> allArticles = response.getArticles();
+        for(int i=2; i<=Math.ceil((double) nResults/pageSize); i++) {
+            allArticles.addAll(publicNewsAPIClient.getEverything(q, searchIn, sources, domains, excludeDomains, from, to, language, sortBy, pageSize, i, getAuthString()).getArticles());
         }
+
+        allArticles = filterBadArticles(allArticles);
+
+        return new ResponseWrapper(allArticles.size(), allArticles);
+    }
+
+    /**
+     * @param country
+     * @param category
+     * @param sources
+     * @param q
+     * @param pageSize
+     * @param page
+     * @param authorization
+     * @return ResponseWrapper
+     */
+    @Override
+    public ResponseWrapper getTopHeadlines(String country, String category, String sources, String q, Integer pageSize, Integer page, String authorization) {
+        LOGGER.warn("Making a call to public API Endpoint");
+
+        ResponseWrapper response = publicNewsAPIClient.getTopHeadlines(country, category, sources, q, 100, 1, getAuthString());
+
+        int nResults = response.getTotalResults();
+
+        LOGGER.info("{} results found!", nResults);
+
+        List<Article> allArticles = response.getArticles();
+        for(int i=2; i<=Math.ceil((double) nResults/pageSize); i++) {
+            allArticles.addAll(publicNewsAPIClient.getTopHeadlines(country, category, sources, q, 100, i, getAuthString()).getArticles());
+        }
+
+        allArticles = filterBadArticles(allArticles);
+
+        return new ResponseWrapper(allArticles.size(), allArticles);
+    }
+
+    private List<Article> filterBadArticles(List<Article> articles) {
+        return  articles.stream().filter((article) ->
+                (article.getTitle() == null || !article.getTitle().equalsIgnoreCase(REMOVED)) &&
+                        (article.getContent() == null || !article.getContent().equalsIgnoreCase(REMOVED)))
+                .collect(Collectors.toList());
     }
 
     private String getAuthString() {

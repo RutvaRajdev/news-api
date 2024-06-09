@@ -38,4 +38,13 @@ public class CustomServiceController {
         ResponseEntity<ResponseWrapper> response = new ResponseEntity<>(allArticles, HttpStatus.OK);
         return response;
     }
+
+    @GetMapping(value = "/getHeadlinesByCountry", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseWrapper> getHeadlinesByCountry(@RequestParam String country) {
+        LOGGER.warn("Searching for top headlines for country code " + country);
+
+        ResponseWrapper allArticles = publicNewsAPIService.getTopHeadlines(country, null, null, null, 100, 1,  null);
+        ResponseEntity<ResponseWrapper> response = new ResponseEntity<>(allArticles, HttpStatus.OK);
+        return response;
+    }
 }
