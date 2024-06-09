@@ -45,7 +45,7 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
                                           Integer pageSize,
                                           Integer page) {
 
-        LOGGER.warn("Making a call to public API Endpoint");
+        LOGGER.info("Making a call to public API Endpoint");
 
         ResponseWrapper response = publicNewsAPIClient.getEverything(q, searchIn, sources, domains, excludeDomains, from, to, language, sortBy, pageSize, page, getAuthString());
 
@@ -78,20 +78,25 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
      * @param q
      * @param pageSize
      * @param page
-     * @param authorization
      * @return ResponseWrapper
      */
     @Override
-    public ResponseWrapper getTopHeadlines(String country, String category, String sources, String q, Integer pageSize, Integer page, String authorization) {
-        LOGGER.warn("Making a call to public API Endpoint");
+    public ResponseWrapper getTopHeadlines(String country, String category, String sources, String q, Integer n, Integer pageSize, Integer page) {
+        LOGGER.info("Making a call to public API Endpoint");
 
         ResponseWrapper response = publicNewsAPIClient.getTopHeadlines(country, category, sources, q, 100, 1, getAuthString());
+
+        List<Article> allArticles = response.getArticles();
+
+        if(n != null) {
+            LOGGER.warn("Restricting result size to " + n);
+            allArticles = filterBadArticles(allArticles);
+            return new ResponseWrapper(n, allArticles.subList(0, n));
+        }
 
         int nResults = response.getTotalResults();
 
         LOGGER.info("{} results found!", nResults);
-
-        List<Article> allArticles = response.getArticles();
 
         try {
             for(int i=2; i<=Math.ceil((double) nResults/pageSize); i++) {

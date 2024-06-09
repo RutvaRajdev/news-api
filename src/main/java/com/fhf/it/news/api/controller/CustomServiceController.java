@@ -43,7 +43,18 @@ public class CustomServiceController {
     public ResponseEntity<ResponseWrapper> getHeadlinesByCountry(@RequestParam String country) {
         LOGGER.warn("Searching for top headlines for country code " + country);
 
-        ResponseWrapper allArticles = publicNewsAPIService.getTopHeadlines(country, null, null, null, 100, 1,  null);
+        ResponseWrapper allArticles = publicNewsAPIService.getTopHeadlines(country, null, null, null, null,100, 1);
+        ResponseEntity<ResponseWrapper> response = new ResponseEntity<>(allArticles, HttpStatus.OK);
+        return response;
+    }
+
+    @GetMapping(value = "/getTopHeadlinesByKeyword", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseWrapper> getTopHeadlinesByKeyword(@RequestParam String keyword, @RequestParam(required = false) Integer n) {
+        LOGGER.warn("Searching the top headlines for keyword " + keyword);
+        if(n != null)
+            LOGGER.warn("Restricting n to " + n);
+
+        ResponseWrapper allArticles = publicNewsAPIService.getTopHeadlines(null, null, null, keyword, n, 100, 1);
         ResponseEntity<ResponseWrapper> response = new ResponseEntity<>(allArticles, HttpStatus.OK);
         return response;
     }

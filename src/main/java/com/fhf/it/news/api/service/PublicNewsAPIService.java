@@ -23,7 +23,7 @@ public interface PublicNewsAPIService {
                                     String category,
                                     String sources,
                                     String q,
+                                    Integer n,
                                     Integer pageSize,
-                                    Integer page,
-                                    String authorization);
+                                    Integer page);
 }
