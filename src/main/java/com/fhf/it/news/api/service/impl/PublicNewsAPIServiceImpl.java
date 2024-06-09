@@ -25,6 +25,7 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
     private String encodedApikey;
 
     private static final String REMOVED = "[Removed]";
+    private static final String ERROR_UPGRADE_REQUIRED = "[426 Upgrade Required]";
 
     private static final Logger LOGGER = LogManager.getLogger(PublicNewsAPIServiceImpl.class);
 
@@ -53,9 +54,17 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
         LOGGER.info("{} results found!", nResults);
 
         List<Article> allArticles = response.getArticles();
-        for(int i=2; i<=Math.ceil((double) nResults/pageSize); i++) {
-            allArticles.addAll(publicNewsAPIClient.getEverything(q, searchIn, sources, domains, excludeDomains, from, to, language, sortBy, pageSize, i, getAuthString()).getArticles());
+
+        try {
+            for(int i=2; i<=Math.ceil((double) nResults/pageSize); i++) {
+                allArticles.addAll(publicNewsAPIClient.getEverything(q, searchIn, sources, domains, excludeDomains, from, to, language, sortBy, pageSize, i, getAuthString()).getArticles());
+            }
+        } catch (Exception e) {
+            if(e.getMessage().contains(ERROR_UPGRADE_REQUIRED)) {
+                LOGGER.warn("Result size > 100, truncating result size to 100 due to API plan limitations");
+            }
         }
+
 
         allArticles = filterBadArticles(allArticles);
 
@@ -83,9 +92,17 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
         LOGGER.info("{} results found!", nResults);
 
         List<Article> allArticles = response.getArticles();
-        for(int i=2; i<=Math.ceil((double) nResults/pageSize); i++) {
-            allArticles.addAll(publicNewsAPIClient.getTopHeadlines(country, category, sources, q, 100, i, getAuthString()).getArticles());
+
+        try {
+            for(int i=2; i<=Math.ceil((double) nResults/pageSize); i++) {
+                allArticles.addAll(publicNewsAPIClient.getTopHeadlines(country, category, sources, q, 100, i, getAuthString()).getArticles());
+            }
+        } catch (Exception e) {
+            if(e.getMessage().contains(ERROR_UPGRADE_REQUIRED)) {
+                LOGGER.warn("Result size > 100, truncating result size to 100 due to API plan limitations");
+            }
         }
+
 
         allArticles = filterBadArticles(allArticles);
 
@@ -93,6 +110,8 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
     }
 
     private List<Article> filterBadArticles(List<Article> articles) {
+        LOGGER.warn("Filtering bad articles");
+
         return  articles.stream().filter((article) ->
                 (article.getTitle() == null || !article.getTitle().equalsIgnoreCase(REMOVED)) &&
                         (article.getContent() == null || !article.getContent().equalsIgnoreCase(REMOVED)))
