@@ -57,10 +57,14 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
 
         List<Article> allArticles = response.getArticles();
 
+        // If n is provided, restrict the number of articles returned
         if(n != null) {
             LOGGER.warn("Restricting result size to " + n);
+
+            // Filter out bad articles
             allArticles = filterBadArticles(allArticles);
 
+            // If author name is provided, filter by the name
             if(authorName != null) {
                 allArticles = filterByAuthor(allArticles, authorName);
             }
@@ -73,19 +77,22 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
         LOGGER.info("{} results found!", nResults);
 
         try {
+            // If multiple pages are present, iterating through them all
             for(int i = 2; i<=Math.ceil((double) nResults/ everythingPageSize); i++) {
                 allArticles.addAll(publicNewsAPIClient.getEverything(q, searchIn, sources, domains, excludeDomains, from, to, language, sortBy, everythingPageSize, i, getAuthString()).getArticles());
             }
         } catch (Exception e) {
+            // Free developer plan only supports 1st page
             if(e.getMessage().contains(ERROR_UPGRADE_REQUIRED)) {
-                LOGGER.warn("Result size > 100, truncating result size to 100 due to API plan limitations");
+                LOGGER.warn("Number of pages > 1, iterating only through page 1 due to API plan limitations");
             }
         }
 
-
+        // Filter out bad articles
         allArticles = filterBadArticles(allArticles);
 
         if(authorName != null) {
+            // If author name is provided, filter by the name
             allArticles = filterByAuthor(allArticles, authorName);
         }
 
@@ -107,8 +114,11 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
 
         List<Article> allArticles = response.getArticles();
 
+        // If n is provided, restrict the number of articles returned
         if(n != null) {
             LOGGER.warn("Restricting result size to " + n);
+
+            // Filter out bad articles
             allArticles = filterBadArticles(allArticles);
             return new ResponseWrapper(n, allArticles.subList(0, n));
         }
@@ -117,17 +127,19 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
 
         LOGGER.info("{} results found!", nResults);
 
+        // If multiple pages are present, iterating through them all
         try {
             for(int i = 2; i<=Math.ceil((double) nResults/ topHeadlinesPageSize); i++) {
                 allArticles.addAll(publicNewsAPIClient.getTopHeadlines(country, category, sources, q, topHeadlinesPageSize, i, getAuthString()).getArticles());
             }
         } catch (Exception e) {
+            // Free developer plan only supports 1st page
             if(e.getMessage().contains(ERROR_UPGRADE_REQUIRED)) {
-                LOGGER.warn("Result size > 100, truncating result size to 100 due to API plan limitations");
+                LOGGER.warn("Number of pages > 1, iterating only through page 1 due to API plan limitations");
             }
         }
 
-
+        // Filter out bad articles
         allArticles = filterBadArticles(allArticles);
 
         return new ResponseWrapper(allArticles.size(), allArticles);
