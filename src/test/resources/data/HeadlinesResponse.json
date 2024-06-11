@@ -1,0 +1,45 @@
+{
+  "status": "ok",
+  "totalResults": 3,
+  "articles": [
+    {
+      "source": {
+        "id": "cnn",
+        "name": "CNN"
+      },
+      "author": "Niamh Kennedy, Christian Edwards, Xiaofei Xu",
+      "title": "Macron gambles on snap election after crushing loss to French far right in EU vote - CNN",
+      "description": "France’s President Emmanuel Macron has dissolved the country’s parliament, the National Assembly, and called a snap election after an exit poll showed his Renaissance party is set to be trounced by the far-right opposition in European parliamentary elections …",
+      "url": "https://www.cnn.com/2024/06/09/europe/macron-dissolves-french-parliament-europe-intl/index.html",
+      "urlToImage": "https://media.cnn.com/api/v1/images/stellar/prod/1fdde837-9e8e-40fd-9d35-fb1eb9a65aa7.jpg?c=16x9&q=w_800,c_fill",
+      "publishedAt": "2024-06-10T02:12:00Z",
+      "content": "Frances President Emmanuel Macron has dissolved the countrys parliament, the National Assembly, and called a snap election after an exit poll showed his Renaissance party is set to be trounced by the… [+3230 chars]"
+    },
+    {
+      "source": {
+        "id": "the-washington-post",
+        "name": "The Washington Post"
+      },
+      "author": "Niha Masih, Rachel Pannett, Sarah Dadouch, Leo Sands, Ben Brasch, Praveena Somasundaram, Daniel Wu, Karen DeYoung, Susannah George, Lior Soroka, Steve Hendrix, Shira Rubin, Loveday Morris, Heba Farouk Mahfouz, Marisa Iati, Adam Taylor, Claire Parker, Mariana Alfaro, Naomi Schanen, Ellen Nakashima, Missy Ryan, Dan Lamothe, Maham Javaid",
+      "title": "Gantz to leave emergency government in rebuke of Netanyahu - The Washington Post",
+      "description": "Benny Gantz’s resignation may not bring down the government, but it increases the pressure on Prime Minister Benjamin Netanyahu to accept a cease-fire proposal.",
+      "url": "https://www.washingtonpost.com/world/2024/06/09/israel-hamas-war-news-gaza-hostages/",
+      "urlToImage": "https://www.washingtonpost.com/wp-apps/imrs.php?src=https://arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/7B3NAD6R7S5275JXM3GACORPEE_size-normalized.jpg&w=1440",
+      "publishedAt": "2024-06-10T01:40:47Z",
+      "content": "Israel-Gaza war\r\nThe Israel-Gaza war has gone on for months, and tensions have spilled into the surrounding region.\r\nThe war: On Oct. 7, Hamas militants launched an unprecedented cross-border attack … [+1071 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "New York Post"
+      },
+      "author": "Ryan Dunleavy",
+      "title": "Darren Waller reveals near-death experience from last season in Giants retirement video - New York Post ",
+      "description": "Darren Waller revealed Sunday that he experienced an unspecified emergency medical event during last Giants’ season that left him concerned he might be dying.",
+      "url": "https://nypost.com/2024/06/09/sports/darren-waller-reveals-near-death-experience-in-giants-retirement-video/",
+      "urlToImage": "https://nypost.com/wp-content/uploads/sites/2/2024/06/newspress-collage-zk485sspt-1717981669359.jpg?quality=75&strip=all&1717967539&w=1024",
+      "publishedAt": "2024-06-10T01:33:00Z",
+      "content": "Darren Waller revealed Sunday that he experienced an unspecified emergency medical event during last Giants season that left him concerned he might be dying.\r\nIn announcing his retirement on a YouTub… [+2642 chars]"
+    }
+  ]
+}
