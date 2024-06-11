@@ -43,6 +43,11 @@ public class CustomServiceController {
 
     @GetMapping(value = "/getNLatestByKeyword", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getNLatestByKeyword(@RequestParam Integer n, @RequestParam String keyword) {
+        if(n != null && (n < 0 || n > 100)) {
+            return new ResponseEntity<ErrorResponseWrapper>(new ErrorResponseWrapper("Please provide a value of n between 1 and 100", BAD_REQUEST_CODE), HttpStatus.BAD_REQUEST);
+
+        }
+
         LOGGER.warn("Searching for " + n + " latest articles containing keyword " + keyword);
 
         ResponseWrapper allArticles = publicNewsAPIService.getAllArticles(keyword, null, null, null, null, null, null, null, null, PUBLISHED_AT, n);
@@ -83,7 +88,7 @@ public class CustomServiceController {
 
     @GetMapping(value = "/getTopHeadlinesByKeyword", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getTopHeadlinesByKeyword(@RequestParam String keyword, @RequestParam(required = false) Integer n) {
-        if(n < 0 || n > 100) {
+        if(n != null && (n < 0 || n > 100)) {
             return new ResponseEntity<ErrorResponseWrapper>(new ErrorResponseWrapper("Please provide a value of n between 1 and 100", BAD_REQUEST_CODE), HttpStatus.BAD_REQUEST);
 
         }

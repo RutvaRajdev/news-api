@@ -69,6 +69,8 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
                 allArticles = filterByAuthor(allArticles, authorName);
             }
 
+            n = n < allArticles.size() ? n : allArticles.size();
+
             return new ResponseWrapper(n, allArticles.subList(0, n));
         }
 
@@ -120,6 +122,9 @@ public class PublicNewsAPIServiceImpl implements PublicNewsAPIService {
 
             // Filter out bad articles
             allArticles = filterBadArticles(allArticles);
+
+            n = n < allArticles.size() ? n : allArticles.size();
+            
             return new ResponseWrapper(n, allArticles.subList(0, n));
         }
 
