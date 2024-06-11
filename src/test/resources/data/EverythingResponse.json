@@ -1,0 +1,32 @@
+{
+  "status": "ok",
+  "totalResults": 2,
+  "articles": [
+    {
+      "source": {
+        "id": "wired",
+        "name": "Wired"
+      },
+      "author": "Michael Calore, Lauren Goode",
+      "title": "Google Search Is Growing Up",
+      "description": "This week, we unpack all the news from Google I/O, where we got a glimpse of how the world’s dominant search engine will evolve in the AI era.",
+      "url": "https://www.wired.com/story/gadget-lab-podcast-644/",
+      "urlToImage": "https://media.wired.com/photos/66453c70f0e2f6b8d722ca73/191:100/w_1280,c_limit/Search-Gadget-Lab-Podcast-Gear.jpg",
+      "publishedAt": "2024-05-16T12:00:00Z",
+      "content": "Google held its annual I/O developer event this week. The company gathered software developers, business partners, and folks from the technology press at Shoreline Amphitheater in Mountain View, Cali… [+1809 chars]"
+    },
+    {
+      "source": {
+        "id": "the-verge",
+        "name": "The Verge"
+      },
+      "author": "David Pierce",
+      "title": "Inside the Google algorithm",
+      "description": "An inside look at the Google algorithm, the media’s deals with OpenAI, Apple’s WWDC plans, and a party speaker cameo, on this episode of The Vergecast.",
+      "url": "https://www.theverge.com/2024/5/31/24168605/google-search-api-leak-openai-media-vergecast",
+      "urlToImage": "https://cdn.vox-cdn.com/thumbor/9dkTKXuRyr2s1UKy02Bge5phgUE=/0x0:2040x1360/1200x628/filters:focal(1020x680:1021x681)/cdn.vox-cdn.com/uploads/chorus_asset/file/25472199/VST_598_Site.jpg",
+      "publishedAt": "2024-05-31T13:22:20Z",
+      "content": "Image: Alex Parkin / The Verge\r\n\n \n\n The algorithm that powers Google Search is one of the most important, most complicated, and least understood systems that rule the internet. As of this week, thou… [+2663 chars]"
+    }
+  ]
+}
