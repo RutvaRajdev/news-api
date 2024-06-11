@@ -34,9 +34,6 @@ public class PublicNewsAPIServiceImplIntegrationTest {
 
     @BeforeEach
     public void setUp() throws URISyntaxException {
-        ReflectionTestUtils.setField(publicNewsAPIServiceImpl, "encodedApikey", "OWY3MmVmNTkwYjI0NDhmZGIwZWNiYWMzNGNmYzc3Y2I=");
-        ReflectionTestUtils.setField(publicNewsAPIServiceImpl, "everythingPageSize", 100);
-        ReflectionTestUtils.setField(publicNewsAPIServiceImpl, "topHeadlinesPageSize", 100);
 
         mockServer = startClientAndServer(12345);
         mockHTTPRequests();
