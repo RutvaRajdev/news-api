@@ -6,6 +6,8 @@ Caching has also been implemented to improve performance.
 
 ## API Reference
 
+Postman collection with sample http requests found at https://drive.google.com/file/d/10fVL09lyx-BeCGdTg85pESjmCSHcgs2J/view?usp=share_link
+
 #### Get articles by title
 
 Fetch articles with a specific title
