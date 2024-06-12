@@ -6,6 +6,7 @@ import com.fhf.it.news.api.service.PublicNewsAPIService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,7 @@ public class CustomServiceController {
 
     private static final Logger LOGGER = LogManager.getLogger(CustomServiceController.class);
 
+    @Cacheable(value = "articles")
     @GetMapping(value = "/getByTitle/{title}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseWrapper> getByTitle(@PathVariable String title) {
         LOGGER.warn("Searching for articles with title \"" + title + "\"");
@@ -41,6 +43,7 @@ public class CustomServiceController {
         return response;
     }
 
+    @Cacheable(value = "articles")
     @GetMapping(value = "/getNLatestByKeyword", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getNLatestByKeyword(@RequestParam Integer n, @RequestParam String keyword) {
         if(n != null && (n < 0 || n > 100)) {
@@ -55,6 +58,7 @@ public class CustomServiceController {
         return response;
     }
 
+    @Cacheable(value = "articles")
     @GetMapping(value = "/searchByAuthorAndKeyword", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseWrapper> searchByAuthorAndKeywordInTitle(@RequestParam String author, @RequestParam String keyword) {
         LOGGER.warn("Searching for articles containing \"" + keyword + "\" in the title by author " + author);
@@ -64,6 +68,7 @@ public class CustomServiceController {
         return response;
     }
 
+    @Cacheable(value = "articles")
     @GetMapping(value = "/searchByKeywordInTitle", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseWrapper> searchByKeywordInTitle(@RequestParam String keyword) {
         LOGGER.warn("Searching for articles containing \"" + keyword + "\" in the title");
@@ -73,6 +78,7 @@ public class CustomServiceController {
         return response;
     }
 
+    @Cacheable(value = "headlines")
     @GetMapping(value = "/getHeadlinesByCountry", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getHeadlinesByCountry(@RequestParam String country) {
         if(!validCountries.contains(country)) {
@@ -86,6 +92,7 @@ public class CustomServiceController {
         return response;
     }
 
+    @Cacheable(value = "headlines")
     @GetMapping(value = "/getTopHeadlinesByKeyword", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getTopHeadlinesByKeyword(@RequestParam String keyword, @RequestParam(required = false) Integer n) {
         if(n != null && (n < 0 || n > 100)) {
