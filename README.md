@@ -92,7 +92,7 @@ Fetch top headlines by keyword. Optionally limit the number of headlines
 Follow the steps listed below to run and test this project:
 
 - Run the main java class from NewsApiApplication.java
-- Execute the following example urls in your browser. Alternatively, import the postman collection found in this repository into your postman app (recommended). It contains the Http requests listed below. If you execute these requests through postman, you should also see each request taking significantly less time on second or any subsequent execution since caching has been implemented.
+- Execute the following example urls in your browser. Alternatively, import the postman collection found at https://drive.google.com/file/d/10fVL09lyx-BeCGdTg85pESjmCSHcgs2J/view?usp=share_link into your postman app (recommended). It contains the Http requests listed below. If you execute these requests through postman, you should also see each request taking significantly less time on second or any subsequent execution since caching has been implemented.
 
   http://localhost:8080/service/getByTitle/Learning%20to%20Live%20With%20Google's%20AI%20Overviews
 
